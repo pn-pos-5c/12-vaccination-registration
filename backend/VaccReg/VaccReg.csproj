@@ -14,4 +14,10 @@
     <ProjectReference Include="..\VaccRegDb\VaccRegDb.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\vaccinations.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
