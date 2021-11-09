@@ -1,0 +1,48 @@
+<h1>Welcome to VaccinateMe 2021</h1>
+<h1 *ngIf="registration !== null">, {{registration.firstName}} {{registration.lastName}}</h1>
+
+<h3 [ngClass]="{'active': step === 1}">1 - Enter your social security number and your pin</h3>
+<div [formGroup]="registrationForm" *ngIf="step === 1">
+  <input type="number" formControlName="ssn" placeholder="Social Security Number">
+  <div *ngIf="ssn.invalid && (ssn.dirty || ssn.touched)" class="alert alert-danger">
+    <div *ngIf="ssn.errors?.required">
+      Please enter your social security number.
+    </div>
+    <div *ngIf="ssn.errors?.min || ssn.errors?.max">
+      Your social security number has to be exactly 10 digits.
+    </div>
+  </div>
+  <br>
+
+  <input type="number" formControlName="pin" placeholder="PIN">
+  <div *ngIf="pin.invalid && (pin.dirty || pin.touched)" class="alert alert-danger">
+    <div *ngIf="pin.errors?.required">
+      Please enter your pin.
+    </div>
+    <div *ngIf="pin.errors?.min || pin.errors?.max">
+      Your pin has to be exactly 6 digits.
+    </div>
+  </div>
+  <br>
+
+  <button (click)="nextStep()">Weiter</button>
+</div>
+
+<h3 [ngClass]="{'active': step === 2}">2 - Vaccination date</h3>
+<div [formGroup]="dateForm" *ngIf="step === 2">
+  <input type="date" min="2021-12-01" max="2021-12-20" formControlName="date">
+  <button (click)="nextStep()">Weiter</button>
+</div>
+
+<h3 [ngClass]="{'active': step === 3}">3 - Select time slot</h3>
+<div *ngIf="step === 3">
+  <select [(ngModel)]="selectedTimeslot">
+    <option *ngFor="let timeslot of timeslots" value="{{timeslot}}">{{timeslot}}</option>
+  </select>
+  <button (click)="nextStep()">Weiter</button>
+</div>
+
+<h3 [ngClass]="{'active': step === 4}">4 - Conformation</h3>
+<div *ngIf="step === 4">
+  <h4 class="active">Your vaccination registration ID is {{vaccination?.id}}. Please come to your doctor on {{vaccination?.vaccinationDate?.substr(0, 10)}} at {{vaccination?.vaccinationDate?.substr(11)}}</h4>
+</div>

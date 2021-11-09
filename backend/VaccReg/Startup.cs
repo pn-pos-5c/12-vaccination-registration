@@ -26,6 +26,9 @@ namespace VaccReg
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VaccRegContext>(options => options.UseSqlite(Configuration.GetConnectionString("registrationsDb")));
+
+            services.AddScoped<RegistrationsService>();
+
             services.AddControllers();
             services.AddHostedService<DatabaseService>();
 
@@ -52,11 +55,11 @@ namespace VaccReg
                 });
             }
 
-            app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
+            app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
+            .UseHttpsRedirection()
+            .UseRouting()
+            .UseAuthorization()
+            .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });

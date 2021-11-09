@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
@@ -35,14 +36,19 @@ namespace VaccReg.Services
             using IServiceScope scope = scopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<VaccRegContext>();
 
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
             if (Program.Args.Length != 2 || Program.Args[0] != "import")
             {
-                logger.Log(LogLevel.Error, "Invalid command line arguments!");
+                logger.Log(LogLevel.Information, "Invalid command line arguments!");
                 return;
             }
 
             var json = File.ReadAllText($"Resources/{Program.Args[1]}");
-            var registrations = JsonSerializer.Deserialize<Registration>(json);
+            var registrations = JsonSerializer.Deserialize<List<Registration>>(json);
+            db.Registrations.AddRange(registrations);
+            db.SaveChanges();
         }
     }
 }
